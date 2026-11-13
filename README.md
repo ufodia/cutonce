@@ -10,7 +10,7 @@
 
 **Find useful parts inside an awkward offcut.** Trace a photographed piece of material, mark defects, and turn a rectangular parts list into a measured layout you can take to your workbench.
 
-[First layout](docs/guide.md) · [How it works](docs/architecture.md) · [Contribute](CONTRIBUTING.md) · [MIT license](LICENSE)
+[Open the app](https://cutonce-five.vercel.app/) · [First layout](docs/guide.md) · [How it works](docs/architecture.md) · [Contribute](CONTRIBUTING.md) · [MIT license](LICENSE)
 
 <p>
   <a href="https://buymeacoffee.com/ufodia"><img src="docs/assets/support.svg" alt="Buy ufodia a coffee" height="42"></a>
