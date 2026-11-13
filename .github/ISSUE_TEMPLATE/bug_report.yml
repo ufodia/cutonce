@@ -1,0 +1,38 @@
+name: Bug report
+description: Report a reproducible problem in a layout or workflow.
+title: '[Bug]: '
+body:
+  - type: markdown
+    attributes:
+      value: 'Use synthetic data where possible. Remove private photos and identifying labels. For vulnerabilities, follow SECURITY.md instead.'
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Explain what you tried, what you expected, and what actually happened.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps and minimal data
+      description: Include part dimensions, settings, and a minimal geometry example or sanitized project.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and operating system
+      placeholder: 'Chromium version, Windows / Linux / macOS version'
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source commit or version
+      description: Include the commit SHA if you know it.
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Additional evidence
+      description: Screenshots or relevant error messages, with personal data removed.

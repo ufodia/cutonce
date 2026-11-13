@@ -1,0 +1,23 @@
+name: Feature request
+description: Explain a workshop problem and a focused improvement.
+title: '[Idea]: '
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: What are you trying to do?
+      description: Describe the material, task, and current obstacle.
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Proposed behavior
+      description: Explain what a successful result would let you do.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Current workaround and trade-offs
+      description: Include sample dimensions or a sketch if useful. Avoid private project data.

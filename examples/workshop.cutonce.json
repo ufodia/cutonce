@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "name": "The workshop offcut",
+  "calibrated": true,
+  "kerf": 3,
+  "step": 5,
+  "board": [
+    {
+      "x": 0,
+      "y": 0
+    },
+    {
+      "x": 600,
+      "y": 0
+    },
+    {
+      "x": 600,
+      "y": 270
+    },
+    {
+      "x": 440,
+      "y": 270
+    },
+    {
+      "x": 440,
+      "y": 400
+    },
+    {
+      "x": 0,
+      "y": 400
+    }
+  ],
+  "defects": [
+    [
+      {
+        "x": 320,
+        "y": 150
+      },
+      {
+        "x": 390,
+        "y": 150
+      },
+      {
+        "x": 390,
+        "y": 210
+      },
+      {
+        "x": 320,
+        "y": 210
+      }
+    ]
+  ],
+  "parts": [
+    {
+      "id": "shelf",
+      "name": "Shelf",
+      "width": 220,
+      "height": 120,
+      "quantity": 2,
+      "canRotate": true
+    },
+    {
+      "id": "side",
+      "name": "Side",
+      "width": 160,
+      "height": 100,
+      "quantity": 2,
+      "canRotate": true
+    },
+    {
+      "id": "brace",
+      "name": "Brace",
+      "width": 90,
+      "height": 70,
+      "quantity": 3,
+      "canRotate": true
+    }
+  ]
+}
