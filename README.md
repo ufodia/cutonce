@@ -84,6 +84,14 @@ To inspect the compiled application locally, run `npm run build` followed by `np
 | [Testing](docs/testing.md)                          | Reproducible checks and unverified conditions                |
 | [Restore from GitHub](docs/restore.md)              | Rebuild the project on a replacement computer                |
 
+## More from ufodia
+
+Explore more open-source tools by [ufodia](https://github.com/ufodia):
+
+- [Sheet Sentry](https://github.com/ufodia/sheet-sentry) — review spreadsheet changes locally in your browser.
+- [Agent Crash Lab](https://github.com/ufodia/agent-crash-lab) — rehearse failures and recovery in simulated AI workflows.
+- [Browse all repositories](https://github.com/ufodia?tab=repositories).
+
 ## Support a useful little workshop tool
 
 If CutOnce helps you turn leftover material into something useful, you can [buy ufodia a coffee](https://buymeacoffee.com/ufodia). Support is voluntary and funds maintenance, fixes, documentation, and new workshop workflows. The same source and features remain available to everyone.
