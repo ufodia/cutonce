@@ -196,7 +196,7 @@ test('desktop and narrow layouts remain usable and produce documentation evidenc
   await expect(
     page.getByTestId('material-stage').locator('[data-placement]').first(),
   ).toBeVisible();
-  await page.screenshot({ path: 'docs/assets/workspace.png', fullPage: true });
+  await page.screenshot({ path: 'test-results/workspace.png', fullPage: true });
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.getByRole('button', { name: 'Find a layout', exact: true })).toBeVisible();
   expect(

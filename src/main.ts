@@ -162,7 +162,7 @@ function render(): void {
     calibrate:
       'Choose two points with a known real-world distance, enter that distance, then apply the scale.',
   };
-  app!.innerHTML = `<header class="site-header"><a class="brand" href="./" aria-label="CutOnce home"><span class="brand-mark" aria-hidden="true"><i></i></span><span>cut<span class="brand-light">once</span><sup>↗</sup></span></a><div class="header-caption">USE WHAT YOU HAVE.<br><span>MAKE SOMETHING GOOD.</span></div><nav class="header-actions" aria-label="Project actions"><button data-action="demo" class="button quiet">Load sample</button><button data-action="open" class="button quiet">${icon('upload')}<span>Open project</span></button><button data-action="save" class="button outline">${icon('save')}<span>Save project</span></button><a class="support-button" href="https://buymeacoffee.com/ufodia" target="_blank" rel="noopener noreferrer" aria-label="Support ufodia on Buy Me a Coffee">${icon('coffee')}<span>Fuel the workshop</span></a></nav></header>
+  app!.innerHTML = `<header class="site-header"><a class="brand" href="./" aria-label="CutOnce home"><span class="brand-mark" aria-hidden="true"><i></i></span><span>cut<span class="brand-light">once</span><sup>↗</sup></span></a><div class="header-caption">USE WHAT YOU HAVE.<br><span>MAKE SOMETHING GOOD.</span></div><nav class="header-actions" aria-label="Project actions"><button data-action="demo" class="button quiet">Load sample</button><button data-action="open" class="button quiet">${icon('upload')}<span>Open project</span></button><button data-action="save" class="button outline">${icon('save')}<span>Save project</span></button><a class="support-button" href="https://buymeacoffee.com/ufodia" target="_blank" rel="noopener noreferrer" aria-label="Fuel the workshop — Support ufodia on Buy Me a Coffee">${icon('coffee')}<span>Fuel the workshop</span></a></nav></header>
   <main><section class="page-intro"><div><p class="eyebrow"><span class="status-dot"></span> THE OFFCUT WORKSHOP <span class="eyebrow-divider">/</span> V0.1</p><h1>Good material. <span>Second chance.</span></h1><p class="intro-copy">Turn an awkward offcut into your next project. Trace, measure, fit.</p></div><div class="local-badge"><span class="local-icon">⌂</span><div><strong>Your workshop, your files.</strong><span>Works locally · No accounts · No uploads</span></div></div></section>
   <div class="workflow-strip" aria-label="Workflow"><span class="workflow-step ${project.image ? 'complete' : ''}"><b>01</b> Bring your material</span><span class="workflow-line"></span><span class="workflow-step ${project.calibrated ? 'complete' : ''}"><b>02</b> Set the scale</span><span class="workflow-line"></span><span class="workflow-step ${result ? 'complete' : ''}"><b>03</b> Find the fit</span><span class="workflow-line"></span><span class="workflow-step"><b>04</b> Make the cut</span></div>
   <div class="editor-layout"><aside class="sidebar" aria-label="Material and part settings">
@@ -239,7 +239,7 @@ async function findLayout(): Promise<void> {
       fit ? 'success' : 'info',
     );
   } catch (error) {
-    setStatus(error instanceof Error ? error.message : 'Could not calculate a layout.', 'error');
+    setStatus(error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Could not calculate a layout.', 'error');
   } finally {
     running = false;
     render();
@@ -452,7 +452,7 @@ function bindEvents(): void {
         render();
       } catch (error) {
         setStatus(
-          error instanceof Error ? error.message : 'Something could not be completed.',
+          error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Something could not be completed.',
           'error',
         );
         render();
@@ -514,7 +514,7 @@ function bindEvents(): void {
       } else return;
       render();
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : 'Check the entered value.', 'error');
+      setStatus(error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Check the entered value.', 'error');
       render();
     }
   };
@@ -530,7 +530,7 @@ function bindEvents(): void {
       const transformed = point.matrixTransform(matrix.inverse());
       appendPoint(transformed);
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : 'Could not mark that point.', 'error');
+      setStatus(error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Could not mark that point.', 'error');
       render();
     }
   });
@@ -540,7 +540,7 @@ function bindEvents(): void {
     void importPhoto(file)
       .then(render)
       .catch((error) => {
-        setStatus(error instanceof Error ? error.message : 'Could not open the photo.', 'error');
+        setStatus(error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Could not open the photo.', 'error');
         render();
       });
   });
@@ -561,7 +561,7 @@ function bindEvents(): void {
       })
       .catch((error) => {
         setStatus(
-          error instanceof Error ? error.message : 'Could not open that project file.',
+          error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Could not open that project file.',
           'error',
         );
         render();

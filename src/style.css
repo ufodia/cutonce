@@ -8,7 +8,7 @@
   --forest-deep: #102f26;
   --acid: #d9f58b;
   --line: #d9ddd0;
-  --muted: #6a7669;
+  --muted: #5c685b;
   --paper: #fffcf4;
   --mono: 'Cascadia Code', 'SFMono-Regular', Consolas, monospace;
   --radius: 12px;
@@ -121,7 +121,7 @@ textarea {
   color: #546757;
 }
 .header-caption span {
-  color: #899483;
+  color: #656e61;
 }
 .header-actions {
   margin-left: auto;
@@ -297,14 +297,14 @@ main {
   font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
-  color: #87907e;
+  color: #656c5f;
   display: flex;
   align-items: center;
   gap: 10px;
 }
 .workflow-step b {
   font: 11px var(--mono);
-  color: #9aa48d;
+  color: #666c5d;
   border: 1px solid #cfd8c1;
   border-radius: 50%;
   width: 24px;
@@ -360,7 +360,7 @@ main {
 }
 .section-number {
   font: 11px var(--mono);
-  color: #7f8b72;
+  color: #6c7661;
 }
 .micro-tag {
   font: 11px var(--mono);
@@ -641,7 +641,7 @@ textarea {
   border-radius: 5px;
   margin-top: 12px;
   font-size: 11px;
-  color: #71855c;
+  color: #667853;
 }
 .add-piece .icon {
   width: 13px;
@@ -664,7 +664,7 @@ textarea {
 }
 .settings-grid label > span {
   font: 11px var(--mono);
-  color: #a0a68f;
+  color: #707464;
   float: right;
 }
 .settings-grid input {
@@ -706,7 +706,7 @@ textarea {
 }
 .workspace-top .eyebrow {
   font-size: 11px;
-  color: #8e9a80;
+  color: #6b7460;
   margin-bottom: 6px;
   letter-spacing: 1.5px;
 }
@@ -737,7 +737,7 @@ textarea {
 .tool-button {
   border: 1px solid transparent;
   background: transparent;
-  color: #7b896c;
+  color: #66725a;
   border-radius: 5px;
   padding: 7px 9px;
   display: flex;
@@ -987,7 +987,7 @@ textarea {
 .stat strong small {
   font-family: inherit;
   font-size: 13px;
-  color: #9aa88b;
+  color: #69725f;
   letter-spacing: -0.4px;
 }
 .stat-caption {
@@ -1069,7 +1069,7 @@ textarea {
   align-items: center;
 }
 .site-footer a {
-  color: #6e805c;
+  color: #617151;
   text-decoration: none;
 }
 .site-footer a:hover {
@@ -1674,7 +1674,7 @@ textarea {
 .canvas-unit,
 .canvas-legend > span,
 .plan-note {
-  color: #6a795e;
+  color: #626f56;
 }
 .header-caption,
 .micro-tag,
@@ -1683,7 +1683,7 @@ textarea {
 .upload-card small,
 .site-footer,
 .site-footer > span:last-child {
-  color: #68775c;
+  color: #616f56;
 }
 .canvas-toolbar > .text-button {
   font-size: 11px;
