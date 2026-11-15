@@ -6,6 +6,36 @@ async function tabTo(page: Page, target: Locator) {
   }
   throw Error('Control is not reachable with Tab');
 }
+test('editing a project keeps the next Tab target visible in a short viewport', async ({
+  page,
+}) => {
+  for (const viewport of [
+    { width: 640, height: 512 },
+    { width: 320, height: 256 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    const project = page.getByRole('textbox', { name: 'Project name', exact: true });
+    const photo = page.getByRole('button', { name: 'Bring an offcut photo', exact: false });
+    await tabTo(page, project);
+    await project.evaluate((el) => {
+      window.scrollBy(0, el.getBoundingClientRect().bottom - (innerHeight - 8));
+    });
+    await expect(project).toBeInViewport({ ratio: 1 });
+    await page.keyboard.press('End');
+    await page.keyboard.type(' edited');
+    await page.keyboard.press('Tab');
+    await expect(photo).toBeFocused();
+    // Native focus scrolling can leave a fractional CSS pixel outside the viewport.
+    await expect
+      .soft(photo, `Tab target at ${viewport.width}x${viewport.height}`)
+      .toBeInViewport({ ratio: 0.99 });
+    await page.keyboard.press('Shift+Tab');
+    await expect(project).toBeFocused();
+    await expect(project).toBeInViewport({ ratio: 1 });
+  }
+});
+
 test('keyboard canvas modes and part editing retain focus at narrow reflow widths', async ({
   page,
 }) => {

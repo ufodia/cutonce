@@ -225,7 +225,7 @@ function retainFocus(): () => void {
             : null;
       if (fallback) {
         deferredFocus = null;
-        fallback.focus({ preventScroll: true });
+        fallback.focus({ preventScroll: !tabbing });
         return;
       }
       if (
@@ -237,7 +237,7 @@ function retainFocus(): () => void {
         return;
       }
       deferredFocus = null;
-      replacement.focus({ preventScroll: true });
+      replacement.focus({ preventScroll: !tabbing });
       if (
         !tabbing &&
         start !== null &&
