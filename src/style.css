@@ -18,7 +18,7 @@
 }
 body {
   margin: 0;
-  min-width: 340px;
+  min-width: 320px;
 }
 button,
 input,
@@ -534,7 +534,7 @@ textarea {
 .count-pill {
   background: #e9efdb;
   border: 1px solid #dce5cc;
-  color: #657c4d;
+  color: #4f6539;
   min-width: 22px;
   height: 22px;
   display: grid;
@@ -2109,5 +2109,31 @@ body {
   }
   .tool-button span {
     font-size: 9px;
+  }
+}
+
+@media (max-width: 390px) {
+  .site-header {
+    height: auto;
+    min-height: 100px;
+    flex-wrap: wrap;
+    padding-block: 12px;
+  }
+  .brand {
+    flex: 1 0 100%;
+  }
+  .header-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+.canvas-toolbar .tool-button {
+  font-size: 12px;
+}
+
+@media (forced-colors: active) {
+  .tool-button[aria-pressed='true'] {
+    outline: 2px solid Highlight;
+    outline-offset: -4px;
   }
 }

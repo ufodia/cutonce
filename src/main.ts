@@ -148,7 +148,111 @@ function drawing(): string {
   </svg>`;
 }
 
+type FocusTarget = { selector: string; index: number };
+const focusRoot = app!;
+const focusAttributes = [
+  'data-action',
+  'data-id',
+  'data-mode',
+  'data-field',
+  'data-part-field',
+  'data-cue-field',
+  'data-lesson-field',
+];
+function focusTarget(element: Element | null): FocusTarget | null {
+  if (!element || !focusRoot.contains(element)) return null;
+  let selector: string;
+  if (element.id) selector = `#${CSS.escape(element.id)}`;
+  else {
+    const part = element.closest('[data-part-id]');
+    if (part && element.hasAttribute('data-part-field'))
+      selector = `[data-part-id="${CSS.escape(part.getAttribute('data-part-id')!)}"] [data-part-field="${CSS.escape(element.getAttribute('data-part-field')!)}"]`;
+    else if (element.matches('a[href]'))
+      selector = `a[href="${CSS.escape(element.getAttribute('href')!)}"]`;
+    else {
+      const keys = focusAttributes.filter((key) => element.hasAttribute(key));
+      selector =
+        element.tagName.toLowerCase() +
+        keys.map((key) => `[${key}="${CSS.escape(element.getAttribute(key)!)}"]`).join('');
+      if (!keys.length && element.hasAttribute('aria-label'))
+        selector += `[aria-label="${CSS.escape(element.getAttribute('aria-label')!)}"]`;
+    }
+  }
+  return { selector, index: [...focusRoot.querySelectorAll(selector)].indexOf(element) };
+}
+let tabIntent = false;
+let tabDestination: FocusTarget | null = null;
+let deferredFocus: FocusTarget | null = null;
+focusRoot.addEventListener('keydown', (event) => {
+  if (event.key !== 'Tab') return;
+  const scope = (event.target as Element).closest('dialog[open]') ?? focusRoot;
+  const controls = [
+    ...scope.querySelectorAll<HTMLElement>(
+      'a[href],button:not(:disabled),input:not(:disabled):not([type="hidden"]),select:not(:disabled),textarea:not(:disabled),summary,[tabindex="0"]',
+    ),
+  ].filter((element) => element.tabIndex >= 0 && element.getClientRects().length > 0);
+  const index = controls.indexOf(document.activeElement as HTMLElement);
+  if (index < 0) return;
+  tabIntent = true;
+  tabDestination = focusTarget(controls[index + (event.shiftKey ? -1 : 1)] ?? null);
+  setTimeout(() => {
+    tabIntent = false;
+    tabDestination = null;
+  }, 0);
+});
+function retainFocus(): () => void {
+  const active = document.activeElement;
+  const action = (active as HTMLElement | null)?.dataset.action;
+  const target = tabIntent
+    ? tabDestination
+    : (focusTarget(active) ?? (active === document.body ? deferredFocus : null));
+  const tabbing = tabIntent;
+  const editable = active instanceof HTMLInputElement || active instanceof HTMLTextAreaElement;
+  const start = editable ? active.selectionStart : null;
+  const end = editable ? active.selectionEnd : null;
+  return () => {
+    if (!target) {
+      if (tabbing) deferredFocus = null;
+      return;
+    }
+    const restore = () => {
+      const replacement = focusRoot.querySelectorAll<HTMLElement>(target.selector)[target.index];
+      const fallback =
+        !replacement && action === 'remove-cue'
+          ? focusRoot.querySelector<HTMLElement>('.cue-select[aria-current="true"]')
+          : !replacement && action === 'remove-part'
+            ? focusRoot.querySelector<HTMLElement>('[data-action="add-part"]')
+            : null;
+      if (fallback) {
+        deferredFocus = null;
+        fallback.focus({ preventScroll: true });
+        return;
+      }
+      if (
+        !replacement ||
+        replacement.matches(':disabled') ||
+        !replacement.getClientRects().length
+      ) {
+        deferredFocus = target;
+        return;
+      }
+      deferredFocus = null;
+      replacement.focus({ preventScroll: true });
+      if (
+        !tabbing &&
+        start !== null &&
+        end !== null &&
+        (replacement instanceof HTMLInputElement || replacement instanceof HTMLTextAreaElement)
+      )
+        replacement.setSelectionRange(start, end);
+    };
+    if (tabbing) setTimeout(restore, 0);
+    else restore();
+  };
+}
+
 function render(): void {
+  const restoreFocus = retainFocus();
   const b = bounds();
   const total = project.parts.reduce((sum, p) => sum + p.quantity, 0);
   const placed = result?.placements.length || 0;
@@ -181,6 +285,7 @@ function render(): void {
   <footer class="site-footer"><span><span class="footer-mark">↗</span> Less waste. More making.</span><span>Open source · MIT © ufodia <a href="https://github.com/ufodia/cutonce" target="_blank" rel="noopener noreferrer">View source ↗</a></span></footer></main>
   <input id="photo-file" aria-label="Upload material photo" type="file" accept="image/png,image/jpeg,image/webp" hidden><input id="project-file" aria-label="Import project" type="file" accept="application/json,.json" hidden>`;
   bindEvents();
+  restoreFocus();
 }
 
 function readNumber(id: string): number {
@@ -239,7 +344,14 @@ async function findLayout(): Promise<void> {
       fit ? 'success' : 'info',
     );
   } catch (error) {
-    setStatus(error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Could not calculate a layout.', 'error');
+    setStatus(
+      error instanceof SyntaxError
+        ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.'
+        : error instanceof Error
+          ? error.message
+          : 'Could not calculate a layout.',
+      'error',
+    );
   } finally {
     running = false;
     render();
@@ -452,7 +564,11 @@ function bindEvents(): void {
         render();
       } catch (error) {
         setStatus(
-          error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Something could not be completed.',
+          error instanceof SyntaxError
+            ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.'
+            : error instanceof Error
+              ? error.message
+              : 'Something could not be completed.',
           'error',
         );
         render();
@@ -514,7 +630,14 @@ function bindEvents(): void {
       } else return;
       render();
     } catch (error) {
-      setStatus(error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Check the entered value.', 'error');
+      setStatus(
+        error instanceof SyntaxError
+          ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.'
+          : error instanceof Error
+            ? error.message
+            : 'Check the entered value.',
+        'error',
+      );
       render();
     }
   };
@@ -530,7 +653,14 @@ function bindEvents(): void {
       const transformed = point.matrixTransform(matrix.inverse());
       appendPoint(transformed);
     } catch (error) {
-      setStatus(error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Could not mark that point.', 'error');
+      setStatus(
+        error instanceof SyntaxError
+          ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.'
+          : error instanceof Error
+            ? error.message
+            : 'Could not mark that point.',
+        'error',
+      );
       render();
     }
   });
@@ -540,7 +670,14 @@ function bindEvents(): void {
     void importPhoto(file)
       .then(render)
       .catch((error) => {
-        setStatus(error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Could not open the photo.', 'error');
+        setStatus(
+          error instanceof SyntaxError
+            ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.'
+            : error instanceof Error
+              ? error.message
+              : 'Could not open the photo.',
+          'error',
+        );
         render();
       });
   });
@@ -561,7 +698,11 @@ function bindEvents(): void {
       })
       .catch((error) => {
         setStatus(
-          error instanceof SyntaxError ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.' : error instanceof Error ? error.message : 'Could not open that project file.',
+          error instanceof SyntaxError
+            ? 'This is not valid CutOnce project JSON. Choose a JSON file exported in the documented format.'
+            : error instanceof Error
+              ? error.message
+              : 'Could not open that project file.',
           'error',
         );
         render();
