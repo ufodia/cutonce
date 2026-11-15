@@ -96,6 +96,8 @@ Explore more open-source tools by [ufodia](https://github.com/ufodia):
 
 If CutOnce helps you turn leftover material into something useful, you can [buy ufodia a coffee](https://buymeacoffee.com/ufodia). Support is voluntary and funds maintenance, fixes, documentation, and new workshop workflows. The same source and features remain available to everyone.
 
+You can also support this work through [GitHub Sponsors](https://github.com/sponsors/ufodia).
+
 Contributions are welcome: a small reproducible geometry case is especially useful. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change, and use [SECURITY.md](SECURITY.md) for sensitive reports.
 
 ## License
